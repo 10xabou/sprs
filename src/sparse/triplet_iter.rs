@@ -119,7 +119,9 @@ where
         let mut indptr = row_counts.clone();
         // cum sum
         for i in 1..=self.rows() {
-            indptr[i] += indptr[i - 1];
+            // fix for warning E0502
+            let v = indptr[i - 1];
+            indptr[i] += v;
         }
         let nnz_max = indptr[self.rows()].index();
         let mut indices = vec![I::zero(); nnz_max];
