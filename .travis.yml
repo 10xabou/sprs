@@ -9,13 +9,17 @@ matrix:
       env: RUN_RUSTFMT=true
     - rust: beta
     - rust: nightly
+      env: WITH_NIGHTLY=true
 
 script:
     - rustc --version
     - cargo --version
     - cargo test --all --verbose
+    - cargo test --features=serde,serde_derive --all --verbose
+    - cargo test --release --all --verbose
     - cargo run --example heat
     - ./.travis_rustfmt
+    - ./.travis_nightly
 
 notifications:
   email:

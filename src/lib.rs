@@ -22,7 +22,23 @@ It features a sparse matrix type, [**`CsMat`**](struct.CsMatBase.html), and a sp
 
 ## Quick Examples
 
+
 Matrix construction:
+
+```rust
+use sprs::TriMat;
+
+let mut a = TriMat::new((4, 4));
+a.add_triplet(0, 0, 3.0_f64);
+a.add_triplet(1, 2, 2.0);
+a.add_triplet(3, 0, -2.0);
+
+// This matrix type does not allow computations, and must to
+// converted to a compatible sparse type, using for example
+let b = a.to_csr();
+```
+
+Constructing matrix using the more efficient direct sparse constructor
 
 ```rust
 use sprs::{CsMat, CsVec};
@@ -65,7 +81,10 @@ extern crate alga;
 extern crate ndarray;
 extern crate num_complex;
 extern crate num_traits;
+#[cfg(feature = "serde")]
 extern crate serde;
+extern crate smallvec;
+#[cfg(feature = "serde_derive")]
 #[macro_use]
 extern crate serde_derive;
 #[cfg(test)]
@@ -97,7 +116,7 @@ pub use sparse::{
 pub use sparse::symmetric::is_symmetric;
 
 pub use sparse::permutation::{
-    PermOwned, PermOwnedI, PermView, PermViewI, Permutation,
+    transform_mat_papt, PermOwned, PermOwnedI, PermView, PermViewI, Permutation,
 };
 
 pub use sparse::CompressedStorage::{self, CSC, CSR};
@@ -105,6 +124,9 @@ pub use sparse::CompressedStorage::{self, CSC, CSR};
 pub use sparse::binop;
 pub use sparse::linalg;
 pub use sparse::prod;
+pub use sparse::smmp;
+pub use sparse::special_mats;
+pub use sparse::visu;
 
 pub mod vec {
     pub use sparse::{CsVec, CsVecBase, CsVecView, CsVecViewMut};
